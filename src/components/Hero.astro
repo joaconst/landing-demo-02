@@ -1,0 +1,255 @@
+---
+---
+
+<section class="hero" id="top">
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <p class="hero__byline">Crédito hipotecario para tu primera vivienda</p>
+
+      <h1 class="hero__title display">
+        <span class="line"><span>La casa</span></span>
+        <span class="line"><span>que sí</span></span>
+        <span class="line"><span>podés.</span></span>
+      </h1>
+
+      <p class="lead hero__lead">
+        Simulá tu cuota en treinta segundos. Comparamos las tasas del mercado y te decimos
+        cuánto necesitás ganar para firmar. Sin letra chica.
+      </p>
+
+      <div class="hero__actions">
+        <a class="btn" href="#simulador">Simular mi cuota</a>
+        <a class="hero__link link" href="#tasas">Ver las tasas de hoy</a>
+      </div>
+
+      <ul class="hero__facts">
+        <li>Sin costo de gestión</li>
+        <li>Precalificación en 48 horas</li>
+        <li>Una persona te acompaña hasta la escritura</li>
+      </ul>
+    </div>
+
+    <div class="hero__art" aria-hidden="true">
+      <svg class="portal" viewBox="0 0 420 574" fill="none" role="presentation">
+        <defs>
+          <linearGradient id="p-warm" x1="210" y1="138" x2="210" y2="560" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#f0e7da" />
+            <stop offset="1" stop-color="#d8c1ab" />
+          </linearGradient>
+          <linearGradient id="p-door" x1="210" y1="192" x2="210" y2="560" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#523050" />
+            <stop offset="0.6" stop-color="#2c1427" />
+            <stop offset="1" stop-color="#190a16" />
+          </linearGradient>
+          <radialGradient id="p-glow" cx="210" cy="548" r="150" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#e9ba8f" stop-opacity="0.9" />
+            <stop offset="0.55" stop-color="#c97a4e" stop-opacity="0.22" />
+            <stop offset="1" stop-color="#c97a4e" stop-opacity="0" />
+          </radialGradient>
+          <clipPath id="p-clip">
+            <path d="M134 560V268a76 76 0 0 1 152 0v292Z" />
+          </clipPath>
+        </defs>
+
+        <path class="arch arch--1" d="M20 560V220a190 190 0 0 1 380 0v340Z" fill="#d9cec0" />
+        <path class="arch arch--2" d="M58 560V236a152 152 0 0 1 304 0v324Z" fill="#e6ded2" />
+        <path class="arch arch--3" d="M96 560V252a114 114 0 0 1 228 0v308Z" fill="url(#p-warm)" />
+        <path class="arch arch--4" d="M134 560V268a76 76 0 0 1 152 0v292Z" fill="url(#p-door)" />
+
+        <g clip-path="url(#p-clip)" class="portal__glow">
+          <rect x="134" y="192" width="152" height="368" fill="url(#p-glow)" />
+        </g>
+
+        <ellipse cx="210" cy="560" rx="188" ry="9" fill="#191219" opacity="0.08" />
+        <path d="M20 560h380" stroke="var(--brick)" stroke-opacity="0.6" stroke-width="1.5" />
+      </svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-top: clamp(2.25rem, 5vw, 4.5rem);
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .hero__grid {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .hero__byline {
+    margin-bottom: 1.6rem;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    letter-spacing: 0.002em;
+  }
+
+  .hero__title {
+    font-size: var(--fs-display);
+    max-width: 9ch;
+  }
+
+  .hero__title .line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.06em;
+    margin-bottom: -0.06em;
+  }
+
+  .hero__title .line > span {
+    display: block;
+    animation: lineIn 1.05s var(--ease) both;
+  }
+
+  .hero__title .line:nth-child(2) > span {
+    animation-delay: 0.09s;
+  }
+
+  .hero__title .line:nth-child(3) > span {
+    animation-delay: 0.18s;
+  }
+
+  @keyframes lineIn {
+    from {
+      transform: translateY(105%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .hero__lead {
+    margin-top: clamp(1.4rem, 2.4vw, 2rem);
+    max-width: 38ch;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.6rem;
+    margin-top: clamp(1.75rem, 3vw, 2.4rem);
+  }
+
+  .hero__link {
+    padding-block: 0.45rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .hero__facts {
+    display: grid;
+    gap: 0;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .hero__facts li {
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--line-soft);
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.45;
+  }
+
+  .hero__facts li:last-child {
+    border-bottom: 0;
+  }
+
+  .hero__art {
+    justify-self: center;
+    width: min(100%, 23rem);
+  }
+
+  .portal {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .arch {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: archIn 1.2s var(--ease) both;
+  }
+
+  .arch--1 {
+    animation-delay: 0.12s;
+  }
+
+  .arch--2 {
+    animation-delay: 0.22s;
+  }
+
+  .arch--3 {
+    animation-delay: 0.32s;
+  }
+
+  .arch--4 {
+    animation-delay: 0.42s;
+  }
+
+  .portal__glow {
+    animation: glowIn 1.6s var(--ease) 0.7s both;
+  }
+
+  @keyframes archIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scaleY(0.965);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scaleY(1);
+    }
+  }
+
+  @keyframes glowIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .hero__grid {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.78fr);
+      align-items: end;
+    }
+
+    .hero__facts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0 1.5rem;
+    }
+
+    .hero__facts li {
+      border-bottom: 0;
+      padding-bottom: 0;
+      padding-top: 0.8rem;
+    }
+
+    .hero__art {
+      justify-self: end;
+      width: min(100%, 24rem);
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  @media (min-width: 78rem) {
+    .hero__art {
+      width: min(100%, 27rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__title .line > span,
+    .arch,
+    .portal__glow {
+      animation: none;
+    }
+  }
+</style>

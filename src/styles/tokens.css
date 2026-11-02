@@ -1,0 +1,55 @@
+/* ==========================================================================
+   Umbral — tokens
+   Palette: hueso / berenjena / ladrillo. El verde queda solo para estados.
+   ========================================================================== */
+
+:root {
+  /* Color */
+  --paper: #f1ece4;
+  --paper-2: #e6ded2;
+  --paper-3: #d9cec0;
+  --ink: #191219;
+  --ink-2: #4b3f4b;
+  --ink-3: #6d6069;
+  --plum: #46263f;
+  --plum-700: #381d32;
+  --plum-900: #24101f;
+  --brick: #b44f2a;
+  --brick-ink: #8a3919;
+  --sage: #55684a;
+  --on-dark: #f1ece4;
+  --on-dark-2: #cbbbc6;
+
+  --line: rgba(25, 18, 25, 0.16);
+  --line-soft: rgba(25, 18, 25, 0.09);
+  --line-dark: rgba(241, 236, 228, 0.2);
+  --line-dark-soft: rgba(241, 236, 228, 0.1);
+
+  /* Tipografía */
+  --font-display: 'Newsreader Variable', 'Iowan Old Style', Georgia, serif;
+  --font-sans: 'Archivo Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --fs-display: clamp(3.35rem, 8.4vw, 7.4rem);
+  --fs-h2: clamp(2.15rem, 4.6vw, 3.9rem);
+  --fs-h3: clamp(1.3rem, 1.9vw, 1.65rem);
+  --fs-lead: clamp(1.06rem, 1.25vw, 1.28rem);
+  --fs-body: 1.0625rem;
+  --fs-sm: 0.9rem;
+  --fs-xs: 0.78rem;
+
+  /* Espacio */
+  --wrap: 78rem;
+  --pad: clamp(1.25rem, 5vw, 4rem);
+  --section-y: clamp(4.5rem, 9vw, 8.5rem);
+  --gap: clamp(1.25rem, 3vw, 2.5rem);
+
+  /* Forma y movimiento */
+  --radius: 2px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast: 180ms;
+  --t-med: 420ms;
+  --t-slow: 820ms;
+  --nav-h: 4.5rem;
+
+  color-scheme: light;
+}

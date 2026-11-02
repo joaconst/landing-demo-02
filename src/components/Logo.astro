@@ -1,0 +1,56 @@
+---
+interface Props {
+  href?: string;
+  label?: string;
+  tone?: 'dark' | 'light';
+}
+const { href = '#top', label = 'Umbral, ir al inicio', tone = 'dark' } = Astro.props;
+---
+
+<a class:list={['logo', `logo--${tone}`]} href={href} aria-label={label}>
+  <svg class="logo__mark" viewBox="0 0 28 30" fill="none" aria-hidden="true">
+    <path
+      d="M3.2 28V13.4C3.2 7.65 8.04 3 14 3s10.8 4.65 10.8 10.4V28"
+      stroke="currentColor"
+      stroke-width="2.1"
+    />
+    <path d="M8 28h12" stroke="currentColor" stroke-width="1.4" opacity=".45" />
+  </svg>
+  <span class="logo__word">umbral</span>
+</a>
+
+<style>
+  .logo {
+    position: relative;
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    color: var(--plum);
+  }
+
+  .logo::after {
+    content: '';
+    position: absolute;
+    inset: -0.65rem -0.4rem;
+  }
+
+  .logo--light {
+    color: var(--on-dark);
+  }
+
+  .logo__mark {
+    width: 1.25rem;
+    height: auto;
+    margin-bottom: 0.18rem;
+    flex: none;
+  }
+
+  .logo__word {
+    font-family: var(--font-display);
+    font-size: 1.62rem;
+    font-weight: 400;
+    font-variation-settings: 'opsz' 40;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+</style>

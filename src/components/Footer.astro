@@ -1,0 +1,147 @@
+---
+import Logo from './Logo.astro';
+
+const links = [
+  { href: '#como-funciona', label: 'Cómo funciona' },
+  { href: '#tasas', label: 'Tasas' },
+  { href: '#proyectos', label: 'Proyectos' },
+  { href: '#caso', label: 'Un caso completo' },
+  { href: '#preguntas', label: 'Preguntas' },
+];
+---
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <Logo tone="light" />
+        <p>Crédito hipotecario con las cuentas claras. Buenos Aires, Argentina.</p>
+      </div>
+
+      <nav class="footer__nav" aria-label="Pie de página">
+        {links.map((link) => <a href={link.href}>{link.label}</a>)}
+      </nav>
+
+      <div class="footer__contact">
+        <a class="footer__mail" href="mailto:hola@umbral.demo">hola@umbral.demo</a>
+        <p>Lunes a viernes, de 9 a 18.</p>
+        <a class="footer__cta" href="#simulador">Simular mi cuota</a>
+      </div>
+    </div>
+
+    <div class="footer__legal">
+      <p>
+        Umbral es una marca ficticia creada para esta demostración. Las tasas, entidades y casos
+        que aparecen en la página son ilustrativos y no constituyen una oferta de crédito. Umbral
+        no es una entidad financiera.
+      </p>
+      <p class="footer__meta">Sitio de demostración · 2026</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: clamp(3.5rem, 7vw, 5.5rem) 2.5rem;
+    background: var(--ink);
+    color: var(--on-dark-2);
+  }
+
+  .footer__top {
+    display: grid;
+    gap: 2.5rem;
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .footer__brand p {
+    max-width: 28ch;
+    margin-top: 1rem;
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+
+  .footer__nav {
+    display: grid;
+    gap: 0;
+    align-content: start;
+    font-size: var(--fs-sm);
+  }
+
+  .footer__nav a {
+    width: fit-content;
+    padding-block: 0.55rem;
+    color: var(--on-dark-2);
+    transition: color var(--t-fast) var(--ease);
+  }
+
+  .footer__nav a:hover {
+    color: var(--on-dark);
+  }
+
+  .footer__contact {
+    font-size: var(--fs-sm);
+  }
+
+  .footer__mail {
+    display: inline-block;
+    color: var(--on-dark);
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--brick);
+    text-underline-offset: 0.25em;
+  }
+
+  .footer__contact p {
+    margin-top: 0.5rem;
+    color: var(--on-dark-2);
+    opacity: 0.75;
+  }
+
+  .footer__cta {
+    display: inline-block;
+    margin-top: 1.2rem;
+    padding-bottom: 0.15rem;
+    border-bottom: 1px solid var(--brick);
+    color: var(--on-dark);
+    font-weight: 500;
+  }
+
+  .footer__legal {
+    display: grid;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line-dark-soft);
+    font-size: 0.72rem;
+    line-height: 1.6;
+  }
+
+  .footer__legal p {
+    max-width: 78ch;
+    opacity: 0.8;
+  }
+
+  .footer__meta {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 48rem) {
+    .footer__top {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.7fr) minmax(0, 0.9fr);
+      gap: 2rem;
+    }
+
+    .footer__legal {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 2rem;
+    }
+
+    .footer__meta {
+      text-align: right;
+    }
+  }
+</style>

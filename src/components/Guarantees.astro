@@ -1,0 +1,69 @@
+---
+const items = [
+  {
+    title: 'Sin comisión de gestión',
+    body: 'No cobramos por asesorarte ni por comparar. Si el crédito no sale, no pagás nada.',
+  },
+  {
+    title: 'Una sola persona',
+    body: 'El mismo asesor te responde desde la primera simulación hasta el día de la escritura.',
+  },
+  {
+    title: 'Todo a la vista',
+    body: 'Tasas, gastos y CFT antes de firmar. Si un número no cierra, lo vemos antes de que firmes.',
+  },
+];
+---
+
+<section class="section--sand strip" aria-label="Cómo trabajamos">
+  <div class="wrap strip__grid">
+    {
+      items.map((item) => (
+        <article class="strip__item">
+          <h2>{item.title}</h2>
+          <p>{item.body}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .strip {
+    padding-block: clamp(2.2rem, 4vw, 3.4rem);
+    border-block: 1px solid var(--line-soft);
+  }
+
+  .strip__grid {
+    display: grid;
+    gap: 1.8rem;
+  }
+
+  .strip__item {
+    padding-left: 1.15rem;
+    border-left: 1px solid var(--line);
+  }
+
+  .strip__item h2 {
+    max-width: 24ch;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .strip__item p {
+    max-width: 34ch;
+    margin-top: 0.4rem;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.5;
+  }
+
+  @media (min-width: 48rem) {
+    .strip__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(1.5rem, 4vw, 3.5rem);
+    }
+  }
+</style>

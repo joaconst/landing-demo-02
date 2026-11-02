@@ -1,0 +1,79 @@
+---
+---
+
+<section class="section final">
+  <svg class="final__arch" viewBox="0 0 320 520" fill="none" aria-hidden="true">
+    <path d="M16 520V180a144 144 0 0 1 288 0v340" stroke="currentColor" stroke-width="1" />
+    <path d="M64 520V196a96 96 0 0 1 192 0v324" stroke="currentColor" stroke-width="1" />
+    <path d="M0 520h320" stroke="currentColor" stroke-width="1" />
+  </svg>
+
+  <div class="wrap final__inner" data-reveal>
+    <h2 class="final__title display">Empezá por un número.</h2>
+    <p class="lead">
+      No necesitás cuenta ni dejar tus datos para simular. Movés tres perillas y sabés cuánto
+      te costaría vivir en tu próxima casa.
+    </p>
+    <div class="final__actions">
+      <a class="btn" href="#simulador">Simular mi cuota</a>
+      <p class="final__note">Sin costo. Sin compromiso. Sin llamadas.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .final {
+    overflow: clip;
+    border-top: 1px solid var(--line);
+    padding-block: clamp(5rem, 11vw, 10rem);
+  }
+
+  .final__arch {
+    position: absolute;
+    right: -6rem;
+    bottom: -2rem;
+    width: min(48vw, 30rem);
+    height: auto;
+    color: var(--plum);
+    opacity: 0.14;
+    pointer-events: none;
+  }
+
+  .final__inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .final__title {
+    margin-top: 0;
+    font-size: clamp(3rem, 8.6vw, 7rem);
+    max-width: 12ch;
+  }
+
+  .final__inner .lead {
+    margin-top: 1.5rem;
+    max-width: 42ch;
+  }
+
+  .final__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.2rem 1.8rem;
+    margin-top: 2.2rem;
+  }
+
+  .final__note {
+    color: var(--ink-3);
+    font-size: var(--fs-xs);
+  }
+
+  @media (max-width: 47.99rem) {
+    .final__arch {
+      right: -10rem;
+      bottom: -1rem;
+      width: 26rem;
+      opacity: 0.1;
+    }
+  }
+</style>

@@ -1,0 +1,120 @@
+---
+const steps = [
+  {
+    number: '01',
+    title: 'Simulá',
+    body: 'Movés el valor, la financiación y el plazo. Ves la cuota, el CFT y el ingreso que te piden, todo en la misma pantalla.',
+    meta: '2 minutos',
+  },
+  {
+    number: '02',
+    title: 'Precalificá',
+    body: 'Subís DNI, recibo de sueldo y los últimos tres resúmenes bancarios. En 48 horas hábiles sabés con qué entidad calificás.',
+    meta: '48 horas',
+  },
+  {
+    number: '03',
+    title: 'Firmá',
+    body: 'Coordinamos tasación, escribanía y escritura. Vos firmás una vez; del resto nos ocupamos nosotros.',
+    meta: '60 a 90 días',
+  },
+];
+---
+
+<section class="section" id="como-funciona">
+  <div class="wrap">
+    <header class="steps__head" data-reveal>
+      <h2 class="h2">De la simulación a la llave.</h2>
+      <p class="lead">
+        Tres pasos, una persona a cargo y fechas claras. Sin intermediarios de más.
+      </p>
+    </header>
+
+    <ol class="steps">
+      {
+        steps.map((step, index) => (
+          <li class="step" data-reveal style={`--delay:${index * 70}ms`}>
+            <span class="step__num" aria-hidden="true">{step.number}</span>
+            <div class="step__body">
+              <h3 class="h3">{step.title}</h3>
+              <p>{step.body}</p>
+            </div>
+            <span class="step__meta">{step.meta}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps__head {
+    display: grid;
+    gap: 1.15rem;
+    max-width: 52ch;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .steps {
+    border-top: 1px solid var(--line);
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 2.6rem minmax(0, 1fr);
+    gap: 0.2rem 1rem;
+    padding: 1.7rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .step__num {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    color: var(--brick-ink);
+    letter-spacing: 0.01em;
+    padding-top: 0.15rem;
+  }
+
+  .step__body h3 {
+    letter-spacing: -0.02em;
+  }
+
+  .step__body p {
+    max-width: 54ch;
+    margin-top: 0.45rem;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.6;
+  }
+
+  .step__meta {
+    grid-column: 2;
+    margin-top: 0.7rem;
+    color: var(--ink-3);
+    font-size: var(--fs-xs);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 50rem) {
+    .step {
+      grid-template-columns: 4rem minmax(0, 1fr) 9rem;
+      align-items: start;
+      gap: 2rem;
+      padding: 2.1rem 0;
+    }
+
+    .step__num {
+      font-size: 1.25rem;
+      padding-top: 0.1rem;
+    }
+
+    .step__meta {
+      grid-column: auto;
+      justify-self: end;
+      margin-top: 0.25rem;
+      text-align: right;
+    }
+  }
+</style>

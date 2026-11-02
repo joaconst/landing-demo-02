@@ -1,0 +1,113 @@
+---
+/**
+ * Marco de espera para un proyecto sin foto.
+ * Cinco dibujos distintos en el lenguaje de la marca: arco, planta,
+ * elevación, retícula y escalera. No son decoración: avisan que falta la foto.
+ */
+interface Props {
+  variant?: number;
+  label?: string;
+}
+
+const { variant = 0, label = 'Foto pendiente' } = Astro.props;
+const v = ((variant % 5) + 5) % 5;
+---
+
+<div class="ph">
+  <svg viewBox="0 0 400 320" fill="none" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+    {
+      v === 0 && (
+        <g stroke="currentColor" stroke-width="1.2">
+          <path d="M104 268V144a96 96 0 0 1 192 0v124" />
+          <path d="M132 268V158a68 68 0 0 1 136 0v110" opacity=".62" />
+          <path d="M160 268V172a40 40 0 0 1 80 0v96" opacity=".34" />
+          <path d="M88 268h224" opacity=".5" />
+        </g>
+      )
+    }
+
+    {
+      v === 1 && (
+        <g stroke="currentColor" stroke-width="1.2">
+          <path d="M92 74h216v180H92z" opacity=".55" />
+          <path d="M92 176h96M188 74v180M240 176h68" opacity=".42" />
+          <path d="M188 130a46 46 0 0 1 46 46M188 176h46" opacity=".7" />
+          <path d="M92 274h216M92 268v12M308 268v12" opacity=".3" />
+        </g>
+      )
+    }
+
+    {
+      v === 2 && (
+        <g stroke="currentColor" stroke-width="1.2">
+          <path d="M78 88h244M78 154h244M78 220h244" opacity=".38" />
+          <path d="M118 88v132M168 88v132M218 88v132M268 88v132" opacity=".22" />
+          <path d="M78 220h244M76 220v48M322 220v48" opacity=".55" />
+          <path d="M78 274h244" opacity=".3" />
+        </g>
+      )
+    }
+
+    {
+      v === 3 && (
+        <g stroke="currentColor" stroke-width="1.2">
+          <path d="M96 82h208v156H96z" opacity=".45" />
+          <path d="M96 134h208M96 186h208M148 82v156M200 82v156M252 82v156" opacity=".3" />
+          <path d="M148 134h52v52h-52z" opacity=".7" />
+          <path d="M252 82h52v52h-52z" opacity=".22" />
+          <path d="M96 250h208" opacity=".3" />
+        </g>
+      )
+    }
+
+    {
+      v === 4 && (
+        <g stroke="currentColor" stroke-width="1.2">
+          <path d="M104 262h96v-38h-38v-38h-38v-38h-38v-38h-38" opacity=".55" />
+          <path d="M200 262h96v-38h-38v-38h-38v-38h-38" opacity=".3" />
+          <path d="M104 262v-38h96v-38h-38v-38h-38v-38h-38" opacity=".22" />
+        </g>
+      )
+    }
+  </svg>
+
+  <span class="ph__tag">{label}</span>
+</div>
+
+<style>
+  .ph {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 8%;
+    color: var(--on-dark);
+  }
+
+  .ph svg {
+    width: 100%;
+    height: 100%;
+    color: var(--on-dark);
+    opacity: 0.4;
+  }
+
+  .ph__tag {
+    position: absolute;
+    bottom: 0.7rem;
+    left: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--on-dark-2);
+    font-size: 0.66rem;
+    letter-spacing: 0.02em;
+    opacity: 0.72;
+  }
+
+  .ph__tag::before {
+    content: '';
+    width: 0.85rem;
+    height: 1px;
+    background: var(--brick);
+  }
+</style>

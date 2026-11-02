@@ -1,0 +1,811 @@
+---
+import {
+  DEFAULT_INPUTS,
+  PRODUCTS,
+  ars,
+  pct,
+  simulate,
+  usd,
+} from '../lib/mortgage';
+
+const result = simulate(DEFAULT_INPUTS);
+const firstTotal = result.first.capital + result.first.interest + result.first.insurance;
+const capShare = (result.first.capital / firstTotal) * 100;
+const intShare = (result.first.interest / firstTotal) * 100;
+const fill = (value: number, min: number, max: number) => `${((value - min) / (max - min)) * 100}%`;
+---
+
+<section class="section section--dark calc-section" id="simulador">
+  <div class="wrap">
+    <div class="calc__head">
+      <p class="kicker">La cuenta, sin vueltas</p>
+      <h2 class="h2">Movés tres perillas.<br />Ves el número.</h2>
+      <p class="lead">
+        Cambiá el valor, cuánto financiás y en cuántos años lo pagás. El cálculo se actualiza
+        mientras movés, acá mismo, sin dejar tus datos.
+      </p>
+    </div>
+
+    <div class="calc" data-calc>
+      <div class="calc__form" role="group" aria-labelledby="calc-title">
+        <h2 id="calc-title" class="sr-only">Simulador de cuota hipotecaria</h2>
+
+        <fieldset class="seg">
+          <legend class="field__label">Tipo de tasa</legend>
+          <div class="seg__box">
+            <label class="seg__opt">
+              <input type="radio" name="mode" value="uva" checked />
+              <span>UVA</span>
+            </label>
+            <label class="seg__opt">
+              <input type="radio" name="mode" value="fija" />
+              <span>Tasa fija</span>
+            </label>
+          </div>
+          <p class="seg__note" data-out="mode-note">{PRODUCTS.uva.note}</p>
+        </fieldset>
+
+        <div class="field">
+          <div class="field__head">
+            <label for="price">Valor de la propiedad</label>
+            <output for="price" data-out="price">{usd.format(DEFAULT_INPUTS.priceUsd)}</output>
+          </div>
+          <input
+            id="price"
+            name="price"
+            type="range"
+            min="60000"
+            max="400000"
+            step="5000"
+            value={DEFAULT_INPUTS.priceUsd}
+            style={`--fill:${fill(DEFAULT_INPUTS.priceUsd, 60000, 400000)}`}
+          />
+          <div class="field__scale"><span>US$ 60.000</span><span>US$ 400.000</span></div>
+        </div>
+
+        <div class="field">
+          <div class="field__head">
+            <label for="financed">Financiación</label>
+            <output for="financed" data-out="financed">{DEFAULT_INPUTS.financedPct}%</output>
+          </div>
+          <input
+            id="financed"
+            name="financed"
+            type="range"
+            min="50"
+            max="80"
+            step="5"
+            value={DEFAULT_INPUTS.financedPct}
+            style={`--fill:${fill(DEFAULT_INPUTS.financedPct, 50, 80)}`}
+          />
+          <div class="field__scale"><span>50%</span><span data-out="financed-max">80%</span></div>
+        </div>
+
+        <div class="field">
+          <div class="field__head">
+            <label for="years">Plazo</label>
+            <output for="years" data-out="years">{DEFAULT_INPUTS.years} años</output>
+          </div>
+          <input
+            id="years"
+            name="years"
+            type="range"
+            min="10"
+            max="30"
+            step="5"
+            value={DEFAULT_INPUTS.years}
+            style={`--fill:${fill(DEFAULT_INPUTS.years, 10, 30)}`}
+          />
+          <div class="field__scale"><span>10 años</span><span data-out="years-max">30 años</span></div>
+        </div>
+
+        <details class="assumptions">
+          <summary>Supuestos del cálculo</summary>
+          <div class="assumptions__body">
+            <label class="mini" for="fx">
+              <span>Tipo de cambio (ARS por USD)</span>
+              <input
+                id="fx"
+                name="fx"
+                type="number"
+                min="500"
+                max="3000"
+                step="10"
+                value={DEFAULT_INPUTS.fx}
+                inputmode="numeric"
+              />
+            </label>
+            <div class="mini" data-inflation-field>
+              <label for="inflation">
+                <span>Inflación anual estimada</span>
+                <output for="inflation" data-out="inflation">{DEFAULT_INPUTS.inflation * 100}%</output>
+              </label>
+              <input
+                id="inflation"
+                name="inflation"
+                type="range"
+                min="0"
+                max="60"
+                step="1"
+                value={DEFAULT_INPUTS.inflation * 100}
+                style={`--fill:${fill(DEFAULT_INPUTS.inflation * 100, 0, 60)}`}
+              />
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <aside class="result" aria-labelledby="result-title">
+        <div class="result__head">
+          <span id="result-title">Cálculo estimativo</span>
+          <span>nov. 2026</span>
+        </div>
+
+        <p class="result__label">Cuota inicial</p>
+        <p class="result__value">
+          <span data-out="payment" data-value={String(result.initialPayment)}>
+            {ars.format(result.initialPayment)}
+          </span>
+          <span class="result__per">por mes</span>
+        </p>
+        <p class="result__note">{PRODUCTS.uva.note}</p>
+
+        <dl class="result__rows">
+          <div>
+            <dt>Cuota a 5 años</dt>
+            <dd data-out="payment5">{ars.format(result.paymentAtYear5)}</dd>
+          </div>
+          <div>
+            <dt>Ingreso mínimo sugerido</dt>
+            <dd data-out="income">{ars.format(result.requiredIncome)}</dd>
+          </div>
+          <div>
+            <dt>Monto del crédito</dt>
+            <dd data-out="credit">{ars.format(result.creditArs)}</dd>
+          </div>
+          <div>
+            <dt>Aporte inicial + gastos</dt>
+            <dd data-out="down">{ars.format(result.downPaymentArs + result.closingArs)}</dd>
+          </div>
+          <div>
+            <dt>CFT estimado</dt>
+            <dd data-out="cft">{pct.format(result.cft)} + inflación</dd>
+          </div>
+        </dl>
+
+        <div class="mix" data-mix style={`--cap:${capShare}%;--int:${intShare}%`} aria-hidden="true">
+          <span class="mix__cap"></span><span class="mix__int"></span><span class="mix__seg"></span>
+        </div>
+        <p class="mix__legend">Composición de la primera cuota: capital, interés y seguros.</p>
+
+        <p class="result__fine">
+          Cálculo estimativo sobre un crédito en pesos, con seguro de vida e incendio incluido.
+          No incluye tasación ni sellados. No constituye una oferta de crédito.
+        </p>
+
+        <p class="sr-only" data-live aria-live="polite"></p>
+      </aside>
+    </div>
+  </div>
+
+  <div class="peek" data-peek aria-hidden="true">
+    <span>Cuota inicial</span>
+    <strong data-out="peek">{ars.format(result.initialPayment)}</strong>
+    <span>por mes</span>
+  </div>
+</section>
+
+<style>
+  .calc-section {
+    padding-bottom: var(--section-y);
+  }
+
+  .calc__head {
+    display: grid;
+    gap: 1.15rem;
+    max-width: 58ch;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .calc {
+    display: grid;
+    gap: clamp(2.25rem, 4vw, 4.5rem);
+  }
+
+  /* ---------- Controles ---------- */
+
+  .seg {
+    padding: 0;
+    border: 0;
+  }
+
+  .field__label,
+  .field__head label,
+  .mini span {
+    display: block;
+    color: var(--on-dark);
+    font-size: 0.86rem;
+    font-weight: 500;
+    letter-spacing: 0.005em;
+  }
+
+  .seg__box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.35rem;
+    margin-top: 0.7rem;
+    padding: 0.3rem;
+    border: 1px solid var(--line-dark);
+    border-radius: var(--radius);
+  }
+
+  .seg__opt {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .seg__opt input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .seg__opt span {
+    display: flex;
+    min-height: 2.55rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1px;
+    color: var(--on-dark-2);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition:
+      background var(--t-fast) var(--ease),
+      color var(--t-fast) var(--ease);
+  }
+
+  .seg__opt:hover span {
+    color: var(--on-dark);
+  }
+
+  .seg__opt input:checked + span {
+    background: var(--paper);
+    color: var(--plum);
+  }
+
+  .seg__opt input:focus-visible + span {
+    outline: 2px solid var(--brick);
+    outline-offset: 2px;
+  }
+
+  .seg__note {
+    margin-top: 0.7rem;
+    color: var(--on-dark-2);
+    font-size: var(--fs-xs);
+  }
+
+  .field {
+    margin-top: 1.9rem;
+  }
+
+  .field__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .field__head output {
+    color: var(--on-dark);
+    font-family: var(--font-display);
+    font-size: 1.32rem;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  .field input[type='range'],
+  .mini input[type='range'] {
+    --fill: 0%;
+    width: 100%;
+    height: 2.9rem;
+    margin-top: 0.35rem;
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .field input[type='range']::-webkit-slider-runnable-track,
+  .mini input[type='range']::-webkit-slider-runnable-track {
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(
+      to right,
+      var(--on-dark) 0 var(--fill),
+      rgba(241, 236, 228, 0.22) var(--fill) 100%
+    );
+  }
+
+  .field input[type='range']::-webkit-slider-thumb,
+  .mini input[type='range']::-webkit-slider-thumb {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: -0.53rem;
+    border: 0;
+    border-radius: 50%;
+    background: var(--paper);
+    box-shadow:
+      0 0 0 1px var(--plum),
+      0 2px 6px rgba(0, 0, 0, 0.28);
+    -webkit-appearance: none;
+  }
+
+  .field input[type='range']::-moz-range-track,
+  .mini input[type='range']::-moz-range-track {
+    height: 2px;
+    border-radius: 2px;
+    background: rgba(241, 236, 228, 0.22);
+  }
+
+  .field input[type='range']::-moz-range-progress,
+  .mini input[type='range']::-moz-range-progress {
+    height: 2px;
+    border-radius: 2px;
+    background: var(--on-dark);
+  }
+
+  .field input[type='range']::-moz-range-thumb,
+  .mini input[type='range']::-moz-range-thumb {
+    width: 1.15rem;
+    height: 1.15rem;
+    border: 0;
+    border-radius: 50%;
+    background: var(--paper);
+    box-shadow: 0 0 0 1px var(--plum);
+  }
+
+  .field input[type='range']:focus-visible,
+  .mini input[type='range']:focus-visible {
+    outline: 2px solid var(--brick);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  .field__scale {
+    display: flex;
+    justify-content: space-between;
+    margin-top: -0.3rem;
+    color: var(--on-dark-2);
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.75;
+  }
+
+  .assumptions {
+    margin-top: 2.1rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--line-dark-soft);
+  }
+
+  .assumptions summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--on-dark-2);
+    font-size: 0.82rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .assumptions summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .assumptions summary::before {
+    content: '+';
+    display: grid;
+    width: 1.05rem;
+    height: 1.05rem;
+    place-items: center;
+    border: 1px solid var(--line-dark);
+    border-radius: 50%;
+    font-size: 0.75rem;
+    line-height: 1;
+  }
+
+  .assumptions[open] summary::before {
+    content: '−';
+  }
+
+  .assumptions__body {
+    display: grid;
+    gap: 1.4rem;
+    margin-top: 1.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .mini input[type='number'] {
+    width: 100%;
+    min-height: 2.7rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--line-dark);
+    border-radius: var(--radius);
+    background: rgba(241, 236, 228, 0.06);
+    color: var(--on-dark);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mini label {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .mini output {
+    color: var(--on-dark);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mini input[type='range'] {
+    margin-top: 0.2rem;
+  }
+
+  /* ---------- Resultado ---------- */
+
+  .result {
+    align-self: start;
+    padding: clamp(1.4rem, 3vw, 2.4rem);
+    border-top: 3px solid var(--brick);
+    border-radius: var(--radius);
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .result__head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink-3);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+  }
+
+  .result__label {
+    margin-top: 1.5rem;
+    color: var(--ink-3);
+    font-size: 0.78rem;
+  }
+
+  .result__value {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.15rem 0.6rem;
+    margin-top: 0.2rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.35rem, 6.4vw, 3.3rem);
+    font-weight: 350;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .result__per {
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--ink-3);
+  }
+
+  .result__note {
+    margin-top: 0.55rem;
+    color: var(--ink-2);
+    font-size: var(--fs-xs);
+  }
+
+  .result__rows {
+    margin-top: 1.6rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .result__rows > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.62rem 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .result__rows dt {
+    color: var(--ink-2);
+    font-size: 0.82rem;
+  }
+
+  .result__rows dd {
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  .mix {
+    display: flex;
+    gap: 2px;
+    height: 7px;
+    margin-top: 1.5rem;
+  }
+
+  .mix span {
+    display: block;
+    height: 100%;
+  }
+
+  .mix__cap {
+    width: var(--cap);
+    background: var(--brick);
+  }
+
+  .mix__int {
+    width: var(--int);
+    background: var(--plum);
+  }
+
+  .mix__seg {
+    flex: 1;
+    background: var(--paper-3);
+  }
+
+  .mix__legend {
+    margin-top: 0.55rem;
+    color: var(--ink-3);
+    font-size: 0.7rem;
+    line-height: 1.45;
+  }
+
+  .result__fine {
+    margin-top: 1.4rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line-soft);
+    color: var(--ink-3);
+    font-size: 0.7rem;
+    line-height: 1.5;
+  }
+
+  /* ---------- Barra fija en celular ---------- */
+
+  .peek {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 55;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.8rem var(--pad) calc(0.8rem + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 0.78rem;
+    transform: translateY(110%);
+    transition: transform var(--t-med) var(--ease);
+  }
+
+  .peek.is-on {
+    transform: translateY(0);
+  }
+
+  .peek strong {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  @media (min-width: 60rem) {
+    .calc {
+      grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.92fr);
+    }
+
+    .result {
+      position: sticky;
+      top: calc(var(--nav-h) + 1.5rem);
+    }
+
+    .peek {
+      display: none;
+    }
+  }
+
+  @media (max-width: 59.99rem) {
+    .calc-section {
+      padding-bottom: calc(var(--section-y) + 3.5rem);
+    }
+  }
+</style>
+
+<script>
+  import { PRODUCTS, ars, pct, simulate, usd, type Mode } from '../lib/mortgage';
+
+  const root = document.querySelector<HTMLElement>('[data-calc]');
+
+  if (root) {
+    const section = root.closest<HTMLElement>('.calc-section');
+    const peek = section?.querySelector<HTMLElement>('[data-peek]');
+    const price = root.querySelector<HTMLInputElement>('#price')!;
+    const financed = root.querySelector<HTMLInputElement>('#financed')!;
+    const years = root.querySelector<HTMLInputElement>('#years')!;
+    const fx = root.querySelector<HTMLInputElement>('#fx')!;
+    const inflation = root.querySelector<HTMLInputElement>('#inflation')!;
+    const modes = Array.from(root.querySelectorAll<HTMLInputElement>('input[name="mode"]'));
+    const paymentEl = root.querySelector<HTMLElement>('[data-out="payment"]')!;
+    const mixEl = root.querySelector<HTMLElement>('[data-mix]')!;
+    const inflationField = root.querySelector<HTMLElement>('[data-inflation-field]');
+    const live = root.querySelector<HTMLElement>('[data-live]')!;
+    const ranges = [price, financed, years, inflation];
+
+    let frame = 0;
+
+    const set = (name: string, value: string) => {
+      document.querySelectorAll<HTMLElement>(`[data-out="${name}"]`).forEach((el) => {
+        el.textContent = value;
+      });
+    };
+
+    const fill = (input: HTMLInputElement) => {
+      const min = Number(input.min);
+      const max = Number(input.max);
+      const ratio = max === min ? 0 : ((Number(input.value) - min) / (max - min)) * 100;
+      input.style.setProperty('--fill', `${ratio}%`);
+    };
+
+    const selectedMode = (): Mode =>
+      (modes.find((mode) => mode.checked)?.value as Mode | undefined) ?? 'uva';
+
+    const applyLimits = (mode: Mode) => {
+      const product = PRODUCTS[mode];
+      financed.max = String(product.maxFinanced * 100);
+      years.max = String(product.maxYears);
+      if (Number(financed.value) > Number(financed.max)) financed.value = financed.max;
+      if (Number(years.value) > Number(years.max)) years.value = years.max;
+      set('financed-max', `${product.maxFinanced * 100}%`);
+      set('years-max', `${product.maxYears} años`);
+    };
+
+    const tween = (to: number) => {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const from = Number(paymentEl.dataset.value ?? to);
+      paymentEl.dataset.value = String(to);
+
+      if (reduce || from === to) {
+        paymentEl.textContent = ars.format(to);
+        return;
+      }
+
+      cancelAnimationFrame(frame);
+      const start = performance.now();
+      const duration = 280;
+
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - t, 3);
+        paymentEl.textContent = ars.format(from + (to - from) * eased);
+        if (t < 1) frame = requestAnimationFrame(step);
+      };
+
+      frame = requestAnimationFrame(step);
+    };
+
+    const readFx = () => {
+      const value = Number(fx.value);
+      if (!Number.isFinite(value) || value <= 0) return 1450;
+      return Math.min(3000, Math.max(500, value));
+    };
+
+    const render = (animate: boolean) => {
+      const mode = selectedMode();
+      applyLimits(mode);
+
+      const result = simulate({
+        priceUsd: Number(price.value),
+        financedPct: Number(financed.value),
+        years: Number(years.value),
+        mode,
+        fx: readFx(),
+        inflation: Number(inflation.value) / 100,
+      });
+
+      if (animate) tween(result.initialPayment);
+      else {
+        paymentEl.dataset.value = String(result.initialPayment);
+        paymentEl.textContent = ars.format(result.initialPayment);
+      }
+
+      set('price', usd.format(Number(price.value)));
+      set('financed', `${Number(financed.value)}%`);
+      set('years', `${Number(years.value)} años`);
+      set('inflation', `${Number(inflation.value)}%`);
+      set('peek', ars.format(result.initialPayment));
+      set('payment5', ars.format(result.paymentAtYear5));
+      set('income', ars.format(result.requiredIncome));
+      set('credit', ars.format(result.creditArs));
+      set('down', ars.format(result.downPaymentArs + result.closingArs));
+      set(
+        'cft',
+        mode === 'uva' ? `${pct.format(result.cft)} + inflación` : pct.format(result.cft)
+      );
+      set('mode-note', PRODUCTS[mode].note);
+      if (inflationField) inflationField.hidden = mode === 'fija';
+
+      const total = result.first.capital + result.first.interest + result.first.insurance;
+      mixEl.style.setProperty('--cap', `${(result.first.capital / total) * 100}%`);
+      mixEl.style.setProperty('--int', `${(result.first.interest / total) * 100}%`);
+
+      ranges.forEach(fill);
+    };
+
+    const announce = () => {
+      const mode = selectedMode();
+      const result = simulate({
+        priceUsd: Number(price.value),
+        financedPct: Number(financed.value),
+        years: Number(years.value),
+        mode,
+        fx: readFx(),
+        inflation: Number(inflation.value) / 100,
+      });
+      live.textContent = `Cuota inicial estimada ${ars.format(result.initialPayment)} por mes. Ingreso mínimo sugerido ${ars.format(result.requiredIncome)}.`;
+    };
+
+    const onInput = () => render(true);
+
+    ranges.forEach((input) => input.addEventListener('input', onInput));
+    fx.addEventListener('input', onInput);
+    modes.forEach((mode) => mode.addEventListener('change', () => render(true)));
+    [...ranges, fx, ...modes].forEach((input) =>
+      input.addEventListener('change', () => {
+        render(false);
+        announce();
+      })
+    );
+
+    render(false);
+
+    if (section && peek && 'IntersectionObserver' in window) {
+      const resultPanel = root.querySelector<HTMLElement>('.result');
+      let inSection = false;
+      let inResult = false;
+
+      const sync = () => peek.classList.toggle('is-on', inSection && !inResult);
+
+      new IntersectionObserver(
+        ([entry]) => {
+          inSection = entry.isIntersecting;
+          sync();
+        },
+        { rootMargin: '-20% 0px -15% 0px' }
+      ).observe(section);
+
+      if (resultPanel) {
+        new IntersectionObserver(
+          ([entry]) => {
+            inResult = entry.isIntersecting;
+            sync();
+          },
+          { threshold: 0.35 }
+        ).observe(resultPanel);
+      }
+    }
+  }
+</script>

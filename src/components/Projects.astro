@@ -1,0 +1,244 @@
+---
+import { Image } from 'astro:assets';
+import ProjectPlaceholder from './ProjectPlaceholder.astro';
+import { ESTADOS, PROJECTS } from '../data/projects';
+
+/**
+ * Fotos: cualquier archivo que se deje en `src/assets/proyectos/` con el slug
+ * del proyecto entra solo. El glob corre en build; no hay que tocar el HTML.
+ */
+const files = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/proyectos/*.{jpg,jpeg,png,webp,avif}',
+  { eager: true }
+);
+
+const photos: Record<string, ImageMetadata> = {};
+for (const [path, mod] of Object.entries(files)) {
+  const slug = path.split('/').pop()?.replace(/\.[^.]+$/, '');
+  if (slug) photos[slug] = mod.default;
+}
+---
+
+<section class="section section--ink projects" id="proyectos">
+  <div class="wrap">
+    <header class="projects__head" data-reveal>
+      <div>
+        <p class="kicker">Proyectos</p>
+        <h2 class="h2">De la planta a la llave.</h2>
+      </div>
+      <p class="lead">
+        Una muestra de lo que acompañamos: obras terminadas, en construcción y en pozo. Con
+        barrio, metros y estado, para que sepas qué estás mirando.
+      </p>
+    </header>
+
+    <ul class="projects__grid" data-reveal>
+      {
+        PROJECTS.map((project, index) => {
+          const photo = photos[project.slug];
+          return (
+            <li
+              class:list={['card', index === 0 && 'card--lead', index === 1 && 'card--side']}
+            >
+              <figure>
+                <div class="frame">
+                  {photo ? (
+                    <Image
+                      src={photo}
+                      alt={`${project.name}, ${project.barrio}`}
+                      widths={index === 0 ? [480, 900, 1400] : [280, 560, 840]}
+                      sizes={
+                        index === 0
+                          ? '(min-width: 60rem) 62vw, 92vw'
+                          : '(min-width: 60rem) 28vw, 46vw'
+                      }
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <ProjectPlaceholder variant={index} />
+                  )}
+
+                  {project.render && <span class="badge">Render</span>}
+                </div>
+
+                <figcaption>
+                  <span class="card__name">{project.name}</span>
+                  <span class="card__meta">
+                    {project.barrio} · {project.m2} m²
+                  </span>
+                  <span class="card__estado">
+                    {ESTADOS[project.estado]} · {project.year}
+                  </span>
+                </figcaption>
+              </figure>
+            </li>
+          );
+        })
+      }
+    </ul>
+
+    <p class="projects__note">
+      Proyectos de ejemplo. Las imágenes son referencias y pueden variar.
+      <a class="link" href="#simulador">Simulá tu propio caso</a>.
+    </p>
+  </div>
+</section>
+
+<style>
+  .projects__head {
+    display: grid;
+    gap: 1.4rem;
+    margin-bottom: clamp(2.25rem, 4.5vw, 3.5rem);
+  }
+
+  .projects__head .lead {
+    max-width: 44ch;
+  }
+
+  .projects__grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 78%;
+    gap: 0.75rem;
+    margin: 0 calc(var(--pad) * -1);
+    padding: 0 var(--pad) 0.4rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: var(--pad);
+    scrollbar-width: none;
+  }
+
+  .projects__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .card {
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  .frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: rgba(241, 236, 228, 0.055);
+    border-radius: var(--radius);
+  }
+
+  .card--lead .frame {
+    aspect-ratio: 16 / 10;
+  }
+
+  .frame :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .badge {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.7rem;
+    padding: 0.24rem 0.5rem;
+    border-radius: var(--radius);
+    background: rgba(25, 18, 25, 0.74);
+    color: var(--on-dark);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    backdrop-filter: blur(3px);
+  }
+
+  figcaption {
+    display: grid;
+    gap: 0.12rem;
+    margin-top: 0.7rem;
+  }
+
+  .card__name {
+    font-family: var(--font-display);
+    font-size: 1.06rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .card__meta {
+    color: var(--on-dark-2);
+    font-size: 0.74rem;
+    line-height: 1.35;
+  }
+
+  .card__estado {
+    color: rgba(241, 236, 228, 0.58);
+    font-size: 0.64rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  .projects__note {
+    max-width: 72ch;
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--line-dark-soft);
+    color: rgba(241, 236, 228, 0.56);
+    font-size: var(--fs-xs);
+    line-height: 1.55;
+  }
+
+  .projects__note .link {
+    color: var(--on-dark-2);
+  }
+
+  @media (min-width: 60rem) {
+    .projects__head {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.8fr);
+      align-items: end;
+      gap: 2.5rem;
+    }
+
+    .projects__grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-auto-flow: row;
+      grid-auto-columns: auto;
+      gap: clamp(1rem, 2vw, 1.5rem);
+      margin: 0;
+      padding: 0;
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+
+    .card {
+      grid-column: span 2;
+    }
+
+    .card--lead {
+      grid-column: span 4;
+    }
+
+    /* La pieza vertical se estira para que los epígrafes queden a la misma altura. */
+    .card--side {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card--side figure {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .card--side .frame {
+      flex: 1 1 auto;
+      aspect-ratio: auto;
+    }
+  }
+</style>

@@ -1,0 +1,263 @@
+---
+import { ars, simulate, usd } from '../lib/mortgage';
+
+const caso = simulate({
+  priceUsd: 128_000,
+  financedPct: 75,
+  years: 25,
+  mode: 'uva',
+  fx: 1450,
+  inflation: 0.25,
+});
+
+const datos = [
+  { label: 'Barrio', value: 'Caballito' },
+  { label: 'Tipo', value: '2 ambientes · 58 m²' },
+  { label: 'Precio', value: usd.format(128_000) },
+  { label: 'Financiado', value: '75%' },
+  { label: 'Cuota inicial', value: ars.format(caso.initialPayment) },
+  { label: 'Días hasta la firma', value: '74' },
+];
+---
+
+<section class="section" id="caso">
+  <div class="wrap case">
+    <div class="case__art" data-reveal>
+      <div class="case__frame">
+        <svg viewBox="0 0 400 470" role="presentation" aria-hidden="true" class="plan">
+          <g class="plan__walls">
+            <path d="M44 50H120M225 50H356M356 50V404M44 404H250M320 404H356M44 50V130M44 215V404" />
+            <path d="M250 50V120M250 170V250M250 295V310M250 220H356M250 310H356" />
+            <path d="M44 320H180M180 320V350M180 390V404" />
+          </g>
+
+          <g class="plan__windows">
+            <path d="M120 45H225M120 50H225M120 55H225" />
+            <path d="M40 130V215M44 130V215M48 130V215" />
+            <path d="M250 400H320M250 404H320M250 408H320" />
+          </g>
+
+          <g class="plan__doors">
+            <path d="M250 120A50 50 0 0 1 300 170M250 170H300" />
+            <path d="M250 250A45 45 0 0 1 295 295M250 295H295" />
+          </g>
+
+          <g class="plan__balcony">
+            <path d="M250 404V432M320 404V432M250 432H320" />
+            <path d="M250 428H320" />
+            <path d="M260 404V432M270 404V432M280 404V432M290 404V432M300 404V432M310 404V432" />
+          </g>
+
+          <g class="plan__dims">
+            <path d="M44 404V458M356 404V458M44 452H356M40 452H48M352 452H360" />
+            <path d="M44 50H20M44 404H20M24 50V404M20 46V54M20 400V408" />
+          </g>
+
+          <g class="plan__labels">
+            <text x="147" y="180">LIVING</text>
+            <text x="303" y="95">DORMITORIO</text>
+            <text x="315" y="266">BAÑO</text>
+            <text x="112" y="368">COCINA</text>
+            <text x="285" y="424" class="plan__label-sm">BALCÓN</text>
+            <text x="200" y="447" class="plan__dim">8,40 m</text>
+            <text x="14" y="227" class="plan__dim" transform="rotate(-90 14 227)">6,90 m</text>
+          </g>
+
+          <g class="plan__north">
+            <circle cx="334" cy="28" r="10" />
+            <path d="M334 34V22M330 26l4-4 4 4" />
+            <text x="334" y="50">N</text>
+          </g>
+        </svg>
+      </div>
+      <p class="case__caption">Planta tipo · 58 m² · ejemplo ilustrativo</p>
+    </div>
+
+    <div class="case__body" data-reveal style="--delay:80ms">
+      <p class="kicker">Un expediente completo</p>
+      <h2 class="h2">Así se ve una compra de punta a punta.</h2>
+      <p class="lead">
+        Un dos ambientes en Caballito, financiado al 75% a 25 años. Estos son los números que
+        importan: el precio, la cuota, el aporte propio y cuánto tarda la firma.
+      </p>
+
+      <dl class="case__data">
+        {
+          datos.map((dato) => (
+            <div>
+              <dt>{dato.label}</dt>
+              <dd>{dato.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <p class="case__note">
+        Ejemplo armado con las tasas de esta página. No es una operación real.
+        <a class="link" href="#simulador">Calculá tu propio caso</a>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .case {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .case__frame {
+    padding: clamp(1.2rem, 3vw, 2.2rem);
+    border: 1px solid var(--line-soft);
+    background: var(--paper-2);
+  }
+
+  .plan {
+    width: 100%;
+    height: auto;
+  }
+
+  .plan__walls {
+    fill: none;
+    stroke: var(--ink);
+    stroke-opacity: 0.72;
+    stroke-width: 3.4;
+    stroke-linecap: square;
+  }
+
+  .plan__windows {
+    fill: none;
+    stroke: var(--ink);
+    stroke-opacity: 0.38;
+    stroke-width: 1;
+  }
+
+  .plan__doors {
+    fill: none;
+    stroke: var(--brick);
+    stroke-opacity: 0.75;
+    stroke-width: 1;
+  }
+
+  .plan__balcony {
+    fill: none;
+    stroke: var(--ink);
+    stroke-opacity: 0.32;
+    stroke-width: 0.9;
+  }
+
+  .plan__dims {
+    fill: none;
+    stroke: var(--ink);
+    stroke-opacity: 0.3;
+    stroke-width: 0.8;
+  }
+
+  .plan__labels text {
+    fill: var(--ink-2);
+    font-family: var(--font-sans);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 1.4px;
+    text-anchor: middle;
+  }
+
+  .plan__labels .plan__label-sm {
+    font-size: 6.5px;
+    letter-spacing: 0.8px;
+  }
+
+  .plan__labels .plan__dim {
+    fill: var(--ink-3);
+    font-size: 8px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.4px;
+  }
+
+  .plan__north {
+    fill: none;
+    stroke: var(--ink);
+    stroke-opacity: 0.35;
+    stroke-width: 0.9;
+  }
+
+  .plan__north text {
+    fill: var(--ink-3);
+    stroke: none;
+    font-family: var(--font-sans);
+    font-size: 7px;
+    letter-spacing: 1px;
+    text-anchor: middle;
+  }
+
+  .case__caption {
+    margin-top: 0.7rem;
+    color: var(--ink-3);
+    font-size: var(--fs-xs);
+  }
+
+  .case__body {
+    align-self: center;
+  }
+
+  .case__body .h2 {
+    margin-top: 1.1rem;
+  }
+
+  .case__body .lead {
+    margin-top: 1.2rem;
+  }
+
+  .case__data {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .case__data > div {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .case__data dt {
+    color: var(--ink-3);
+    font-size: 0.72rem;
+  }
+
+  .case__data dd {
+    margin-top: 0.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  .case__data > div:nth-child(5) dd {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .case__note {
+    max-width: 46ch;
+    margin-top: 1.4rem;
+    color: var(--ink-3);
+    font-size: var(--fs-xs);
+    line-height: 1.55;
+  }
+
+  @media (min-width: 60rem) {
+    .case {
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      align-items: center;
+    }
+
+    .case__data {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 2rem;
+    }
+  }
+</style>
